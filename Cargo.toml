@@ -1,0 +1,8 @@
+[package]
+name = "apex-sonata"
+version = "0.1.0"
+authors = ["AXAz0r <thealeksaradovic@gmail.com>"]
+
+[dependencies]
+rand = "0.4.2"
+yaml-rust = "0.4"

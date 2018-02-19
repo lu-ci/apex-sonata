@@ -27,7 +27,7 @@ struct DiscordConfig {
 
 impl DiscordConfig {
     pub fn load(snt: SonataConfig) -> DiscordConfig {
-        let config_location = snt::sigma_location + "discord.yml";
+        let config_location = snt::sigma_location + "/config/core/discord.yml";
         let config_yaml = getYamlContent(config_location);
         let configuration = YamlLoader::load_from_str(config_yaml)::unwrap();
     }

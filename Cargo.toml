@@ -5,4 +5,7 @@ authors = ["AXAz0r <thealeksaradovic@gmail.com>"]
 
 [dependencies]
 rand = "0.4.2"
-yaml-rust = "0.4"
+serde = "1.0"
+serde_derive = "1.0"
+serde_yaml = "0.7"
+serenity = "0.5"

@@ -27,15 +27,7 @@ pub struct Configuration {
 
 impl Configuration {
     fn check_config_files(db_path: &Path, dsc_path: &Path, pref_path: &Path) {
-        let mut missing = false;
-        if !db_path.exists() {
-            missing = true;
-        } else if !dsc_path.exists() {
-            missing = true;
-        } else if !pref_path.exists() {
-            missing = true
-        }
-        if missing {
+        if !(db_path.exists() && dsc_path.exists() && pref_path.exists()) {
             println!("Missing configuration file.");
             exit(1);
         }

@@ -4,8 +4,14 @@ version = "0.1.0"
 authors = ["AXAz0r <thealeksaradovic@gmail.com>"]
 
 [dependencies]
+libsodium-sys = "0.0.14"
+opus-sys = "0.2.1"
 rand = "0.4.2"
 serde = "1.0"
 serde_derive = "1.0"
 serde_yaml = "0.7"
-serenity = "0.5"
+typemap = "0.3.3"
+
+[dependencies.serenity]
+version = "0.5"
+features = ["voice"]

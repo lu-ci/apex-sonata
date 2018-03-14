@@ -52,6 +52,8 @@ impl ApexSonata {
             )
             .help(serenity::framework::standard::help_commands::with_embeds)
             .cmd("summon", commands::summon)
+            .cmd("disconnect", commands::disconnect)
+            .cmd("play", commands::play)
         );
         {
             let mut data = client.data.lock();

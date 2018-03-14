@@ -9,11 +9,14 @@ use serenity::prelude::EventHandler;
 use serenity::model::gateway::Ready;
 use serenity::framework::standard::StandardFramework;
 use config::Configuration;
+use std::sync::Arc;
+use sonata::commands::VoiceManager;
 
 struct Handler;
 
 impl EventHandler for Handler {
-    fn ready(&self, _context: Context, ready: Ready) {
+    fn ready(&self, context: Context, ready: Ready) {
+        context.set_game_name("Rusty Testing");
         println!("{} ready!", ready.user.name);
     }
 }
@@ -50,6 +53,10 @@ impl ApexSonata {
             .help(serenity::framework::standard::help_commands::with_embeds)
             .cmd("summon", commands::summon)
         );
+        {
+            let mut data = client.data.lock();
+            data.insert::<VoiceManager>(Arc::clone(&client.voice_manager));
+        }
         ApexSonata {cli: client}
     }
 }

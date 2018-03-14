@@ -14,5 +14,4 @@ fn main() {
     if let Err(why) = bot.cli.start_autosharded() {
         println!("Startup Error: {:?}!", why);
     }
-    println!("Apex Sonata Owned by {} started.", bot::ApexSonata::owner().name)
 }

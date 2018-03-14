@@ -1,31 +1,30 @@
-use sonata::bot::ApexSonata;
-use serenity::model::id::ChannelId;
-use serenity::client::CACHE;
 use serenity::client::bridge::voice::ClientVoiceManager;
 use std::sync::Arc;
 use typemap::Key;
 use serenity::prelude::Mutex;
 
-struct VoiceManager;
+pub struct VoiceManager;
+
 impl Key for VoiceManager {
     type Value = Arc<Mutex<ClientVoiceManager>>;
 }
 
-command!(summon(ctx, msg, args) {
-    let vc_target = match args.single::<u64>() {
-        Ok(id) => ChannelId(id),
-        Err(_why) => {
-            ApexSonata::check_msg(msg.reply("Sorry, you need to be in a Voice Channel that I can access."));
-            return Ok(());
+command!(summon(context, message) {
+    let voice_state =
+        match message.guild() {
+            Some(guild) => {
+                guild.read().voice_states.get(&message.author.id).cloned()
+            },
+            None => None
+        };
+    let mut voice_manager = {
+        let data = context.data.lock();
+        data.get::<VoiceManager>().cloned().unwrap()
+    };
+    if let (&Some(ref vs), Some(gid)) = (&voice_state, message.guild_id()) {
+        let mut manager = voice_manager.lock();
+        if let Some(cid) = vs.channel_id {
+            manager.join(gid, cid);
         }
-    };
-    let guild_id = match CACHE.read().guild_channel(msg.channel_id) {
-        Some(channel) => channel.read().guild_id,
-        None => {
-            ApexSonata::check_msg(msg.reply("Sorry, this is not something you can do in a DM."));
-            return Ok(());
-        },
-    };
-    let mut manager_lock = ctx.data.lock().get::<VoiceManager>().cloned().unwrap();
-    let mut manager = manager_lock.lock();
+    }
 });

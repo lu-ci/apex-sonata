@@ -4,9 +4,22 @@ use std::process::exit;
 use serde_yaml;
 
 #[derive(Debug, Default, PartialEq, Serialize, Deserialize)]
+pub struct SonataConfiguration {
+    pub sigma: String
+}
+
+impl SonataConfiguration {
+    pub fn new() -> SonataConfiguration {
+        let file = File::open("cfg.yml").expect("Failed to find the Sigma location pointer.");
+        let snt_cfg: SonataConfiguration = serde_yaml::from_reader(&file).expect("Failed to parse the Sigma pointer.");
+        return snt_cfg;
+    }
+}
+
+#[derive(Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct DiscordConfiguration {
     pub token: String,
-    pub bot: bool,
+    pub bot: bool
 }
 
 impl DiscordConfiguration {

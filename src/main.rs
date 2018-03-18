@@ -8,7 +8,8 @@ use sonata::config;
 use sonata::bot;
 
 fn main() {
-    let cfg: config::Configuration = config::Configuration::new("../apex-sigma-core".to_owned());
+    let snt_cfg = config::SonataConfiguration::new();
+    let cfg: config::Configuration = config::Configuration::new(snt_cfg.sigma);
     let mut bot: bot::ApexSonata = bot::ApexSonata::new(cfg);
     println!("Starting up a Sonata instance.");
     if let Err(why) = bot.cli.start_autosharded() {

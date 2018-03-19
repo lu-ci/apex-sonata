@@ -2,7 +2,7 @@ use serenity::client::bridge::voice::ClientVoiceManager;
 use std::sync::Arc;
 use typemap::Key;
 use serenity::prelude::Mutex;
-use serenity::voice;
+use sonata::music::MusicCore;
 
 pub struct VoiceManager;
 
@@ -66,13 +66,7 @@ command!(play(context, message, arguments) {
             return Ok(());
         },
     };
-    if let Some(handler) = manager.get_mut(gid) {
-        let source = match voice::ytdl(&music_url) {
-            Ok(source) => source,
-            Err(_why) => {
-                return Ok(());
-            }
-        };
-        handler.play(source);
-    };
+    let handler = manager.get_mut(gid).unwrap();
+    let mdata = MusicCore::extract_data(music_url);
+    &mdata.play(handler);
 });

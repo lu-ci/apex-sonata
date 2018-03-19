@@ -1,6 +1,8 @@
 #[macro_use] extern crate serde_derive;
 #[macro_use] extern crate serenity;
+extern crate crossbeam_deque;
 extern crate serde_yaml;
+extern crate serde_json;
 extern crate typemap;
 
 pub mod sonata;

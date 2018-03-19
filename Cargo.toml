@@ -4,12 +4,13 @@ version = "0.1.0"
 authors = ["AXAz0r <thealeksaradovic@gmail.com>"]
 
 [dependencies]
-rand = "0.4.2"
-serde = "1.0"
-serde_derive = "1.0"
-serde_yaml = "0.7"
-typemap = "0.3.3"
-sodiumoxide = "0.0.14"
+rand = "*"
+serde = "*"
+serde_derive = "*"
+serde_yaml = "*"
+serde_json = "*"
+typemap = "*"
+crossbeam-deque = "*"
 
 [dependencies.serenity]
 version = "*"

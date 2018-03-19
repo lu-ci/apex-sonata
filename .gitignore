@@ -11,3 +11,9 @@ Cargo.lock
 
 # JetBrains
 .idea/*
+
+# Sonata
+/cache/*
+!/cache/.gitkeep
+!.gitkeep
+

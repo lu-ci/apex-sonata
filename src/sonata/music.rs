@@ -3,6 +3,9 @@ use std::process::Command;
 use serenity::voice;
 use serenity::voice::Handler;
 use std::path::Path;
+use crossbeam_deque::Deque;
+use serenity::model::id::{UserId, ChannelId, GuildId};
+use std::collections::HashMap;
 
 #[derive(Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct MusicItem {
@@ -52,7 +55,16 @@ impl MusicItem {
     }
 }
 
-pub struct MusicCore {}
+pub struct QueueItem {
+    _req_uid: UserId,
+    _req_gid: GuildId,
+    _req_cid: ChannelId,
+    _music_item: MusicItem
+}
+
+pub struct MusicCore {
+    _queues: HashMap<GuildId, Deque<QueueItem>>
+}
 
 impl MusicCore {
     pub fn extract_data(url: String) -> MusicItem {

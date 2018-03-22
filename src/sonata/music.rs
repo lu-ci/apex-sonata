@@ -47,7 +47,7 @@ impl MusicItem {
             .expect("Failed to download music item!");
         }
     }
-    pub fn play(self, handler: &mut Handler) {
+    pub fn play(&self, handler: &mut Handler) {
         self.download();
         let audio_path = format!("cache/{}.mp3", &self.id);
         let source = voice::ffmpeg(&audio_path).unwrap();

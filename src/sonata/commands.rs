@@ -26,7 +26,12 @@ command!(summon(context, message, _arguments) {
         let mut manager = voice_manager.lock();
         if let Some(cid) = vs.channel_id {
             manager.join(gid, cid);
-            let _ = message.channel_id.say(format!("Connected to {}.", vs.channel_id.unwrap().name().unwrap()));
+            let _ = message.channel_id.send_message(|m| m
+                .embed(|e| e
+                    .color(0xDD2E44)
+                    .title(format!("🚩 Connected to {}", vs.channel_id.unwrap().name().unwrap()))
+                )
+            );
         }
     }
 });
@@ -47,7 +52,12 @@ command!(disconnect(context, message, _arguments) {
         let mut manager = voice_manager.lock();
         if let Some(_cid) = vs.channel_id {
             manager.leave(gid);
-            let _ = message.channel_id.say(format!("Disconnected from {}.", vs.channel_id.unwrap().name().unwrap()));
+            let _ = message.channel_id.send_message(|m| m
+                .embed(|e| e
+                    .color(0xFFCC4D)
+                    .title(format!("👋 Disconnected from {}", vs.channel_id.unwrap().name().unwrap()))
+                )
+            );
         }
     }
 });
@@ -69,4 +79,15 @@ command!(play(context, message, arguments) {
     let handler = manager.get_mut(gid).unwrap();
     let mdata = MusicCore::extract_data(music_url);
     &mdata.play(handler);
+    let mut field_container = Vec::new();
+    let playing_title: String = "🎵 Now Playing".to_owned();
+    field_container.push((playing_title, &mdata.title, true));
+    let _ = message.channel_id.send_message(|m| m
+        .embed(|e| e
+            .color(0x3B88C3)
+            .fields(field_container)
+            .url(&mdata.webpage_url)
+            .thumbnail(&mdata.thumbnail)
+        )
+    );
 });

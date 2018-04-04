@@ -14,8 +14,9 @@ use sonata::config::Configuration;
 
 struct Handler;
 
+
 impl EventHandler for Handler {
-    fn ready(&self, context: Context, ready: Ready) {
+    fn ready(&self, _context: Context, ready: Ready) {
         println!("{} ready!", ready.user.name);
     }
 }

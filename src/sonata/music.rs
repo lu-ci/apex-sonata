@@ -35,7 +35,7 @@ impl MusicItem {
         let audio_path = format!("cache/{}.mp3", &self.id);
         let downloaded = Path::new(&audio_path).exists();
         if !downloaded {
-            let _response = Command::new("bin/youtube-dl")
+            let _response = Command::new("youtube-dl")
             .args(&[
                 "--extract-audio",
                 "--audio-format=mp3",
@@ -68,7 +68,7 @@ pub struct MusicCore {
 
 impl MusicCore {
     pub fn extract_data(url: String) -> MusicItem {
-        let response = Command::new("bin/youtube-dl")
+        let response = Command::new("youtube-dl")
         .args(&[
             "--skip-download",
             "--print-json",

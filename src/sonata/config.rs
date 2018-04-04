@@ -15,8 +15,8 @@ impl SonataConfiguration {
         let file = File::open("cfg.yml")?;
         let snt_cfg: SonataConfiguration = match serde_yaml::from_reader(&file) {
             Ok(snt_cfg) => snt_cfg,
-            Err(why) => {
-                println!("Error: {}", why);
+            Err(_) => {
+                println!("Error: No location pointer.");
                 exit(1);
             }
         };
@@ -35,8 +35,8 @@ impl DiscordConfiguration {
         let file = File::open(cfgfile)?;
         let dsc_cfg: DiscordConfiguration = match serde_yaml::from_reader(&file) {
             Ok(dsc_cfg) => dsc_cfg,
-            Err(why) => {
-                println!("Error: {}", why);
+            Err(_) => {
+                println!("Error: No discord config.");
                 exit(1);
             }
         };
@@ -59,8 +59,8 @@ impl DatabaseConfiguration {
         let file = File::open(cfgfile)?;
         let db_cfg: DatabaseConfiguration = match serde_yaml::from_reader(&file) {
             Ok(db_cfg) => db_cfg,
-            Err(why) => {
-                println!("Error: {}", why);
+            Err(_) => {
+                println!("Error: No database config.");
                 exit(1);
             }
         };
@@ -86,8 +86,8 @@ impl PreferencesConfiguration {
         let file = File::open(cfgfile)?;
         let pref_cfg: PreferencesConfiguration = match serde_yaml::from_reader(&file) {
             Ok(pref_cfg) => pref_cfg,
-            Err(why) => {
-                println!("Error: {}", why);
+            Err(_) => {
+                println!("Error: No preferences config.");
                 exit(1);
             }
         };

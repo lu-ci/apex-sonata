@@ -13,15 +13,15 @@ use std::process::exit;
 fn main() {
     let snt_cfg = match config::SonataConfiguration::new() {
         Ok(snt_cfg) => snt_cfg,
-        Err(why) => {
-            println!("Error: {}", why);
+        Err(_) => {
+            println!("Error: Couldn't create core configuration!");
             exit(1);
         }
     };
     let cfg: config::Configuration = match config::Configuration::new(snt_cfg.sigma) {
         Ok(cfg) => cfg,
-        Err(why) => {
-            println!("Error: {}", why);
+        Err(_) => {
+            println!("Error: Couldn't create Sigma configuration.");
             exit(1);
         }
     };

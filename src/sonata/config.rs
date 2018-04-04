@@ -2,6 +2,8 @@ use std::fs::File;
 use std::path::Path;
 use std::process::exit;
 use serde_yaml;
+use std::io::Result;
+
 
 #[derive(Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct SonataConfiguration {
@@ -9,10 +11,16 @@ pub struct SonataConfiguration {
 }
 
 impl SonataConfiguration {
-    pub fn new() -> SonataConfiguration {
-        let file = File::open("cfg.yml").expect("Failed to find the Sigma location pointer.");
-        let snt_cfg: SonataConfiguration = serde_yaml::from_reader(&file).expect("Failed to parse the Sigma pointer.");
-        return snt_cfg;
+    pub fn new() -> Result<Self> {
+        let file = File::open("cfg.yml")?;
+        let snt_cfg: SonataConfiguration = match serde_yaml::from_reader(&file) {
+            Ok(snt_cfg) => snt_cfg,
+            Err(why) => {
+                println!("Error: {}", why);
+                exit(1);
+            }
+        };
+        Ok(snt_cfg)
     }
 }
 
@@ -23,10 +31,16 @@ pub struct DiscordConfiguration {
 }
 
 impl DiscordConfiguration {
-    fn new(cfgfile: &Path) -> DiscordConfiguration {
-        let file = File::open(cfgfile).expect("Failed for find the discord configuration file.");
-        let dsc_cfg: DiscordConfiguration = serde_yaml::from_reader(&file).expect("Failed to read discord configuration file.");
-        return dsc_cfg;
+    fn new(cfgfile: &Path) -> Result<Self> {
+        let file = File::open(cfgfile)?;
+        let dsc_cfg: DiscordConfiguration = match serde_yaml::from_reader(&file) {
+            Ok(dsc_cfg) => dsc_cfg,
+            Err(why) => {
+                println!("Error: {}", why);
+                exit(1);
+            }
+        };
+        Ok(dsc_cfg)
     }
 }
 
@@ -41,10 +55,16 @@ pub struct DatabaseConfiguration {
 }
 
 impl DatabaseConfiguration {
-    fn new(cfgfile: &Path) -> DatabaseConfiguration {
-        let file = File::open(cfgfile).expect("Failed for find the database configuration file.");
-        let db_cfg: DatabaseConfiguration = serde_yaml::from_reader(&file).expect("Failed to read database configuration file.");
-        return db_cfg;
+    fn new(cfgfile: &Path) -> Result<Self> {
+        let file = File::open(cfgfile)?;
+        let db_cfg: DatabaseConfiguration = match serde_yaml::from_reader(&file) {
+            Ok(db_cfg) => db_cfg,
+            Err(why) => {
+                println!("Error: {}", why);
+                exit(1);
+            }
+        };
+        Ok(db_cfg)
     }
 }
 #[derive(Debug, Default, PartialEq, Serialize, Deserialize)]
@@ -62,10 +82,16 @@ pub struct PreferencesConfiguration {
 }
 
 impl PreferencesConfiguration {
-        fn new(cfgfile: &Path) -> PreferencesConfiguration {
-        let file = File::open(cfgfile).expect("Failed for find the database configuration file.");
-        let pref_cfg: PreferencesConfiguration = serde_yaml::from_reader(&file).expect("Failed to read database configuration file.");
-        return pref_cfg;
+        fn new(cfgfile: &Path) -> Result<Self> {
+        let file = File::open(cfgfile)?;
+        let pref_cfg: PreferencesConfiguration = match serde_yaml::from_reader(&file) {
+            Ok(pref_cfg) => pref_cfg,
+            Err(why) => {
+                println!("Error: {}", why);
+                exit(1);
+            }
+        };
+        Ok(pref_cfg)
     }
 }
 
@@ -82,7 +108,7 @@ impl Configuration {
             exit(1);
         }
     }
-    pub fn new(location: String) -> Configuration {
+    pub fn new(location: String) -> Result<Self> {
         let db_loc = format!("{}/config/core/database.yml", location);
         let dsc_loc = format!("{}/config/core/discord.yml", location);
         let pref_loc = format!("{}/config/core/preferences.yml", location);
@@ -90,6 +116,11 @@ impl Configuration {
         let dsc_path = Path::new(&dsc_loc);
         let pref_path = Path::new(&pref_loc);
         Configuration::check_config_files(db_path, dsc_path, pref_path);
-        Configuration {dsc: DiscordConfiguration::new(dsc_path), db: DatabaseConfiguration::new(db_path), pref: PreferencesConfiguration::new(pref_path)}
+        let cfg = Configuration {
+            dsc: DiscordConfiguration::new(dsc_path)?,
+            db: DatabaseConfiguration::new(db_path)?,
+            pref: PreferencesConfiguration::new(pref_path)?
+        };
+        Ok(cfg)
     }
 }

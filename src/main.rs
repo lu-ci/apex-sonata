@@ -8,10 +8,23 @@ extern crate typemap;
 pub mod sonata;
 use sonata::config;
 use sonata::bot;
+use std::process::exit;
 
 fn main() {
-    let snt_cfg = config::SonataConfiguration::new();
-    let cfg: config::Configuration = config::Configuration::new(snt_cfg.sigma);
+    let snt_cfg = match config::SonataConfiguration::new() {
+        Ok(snt_cfg) => snt_cfg,
+        Err(why) => {
+            println!("Error: {}", why);
+            exit(1);
+        }
+    };
+    let cfg: config::Configuration = match config::Configuration::new(snt_cfg.sigma) {
+        Ok(cfg) => cfg,
+        Err(why) => {
+            println!("Error: {}", why);
+            exit(1);
+        }
+    };
     let mut bot: bot::ApexSonata = bot::ApexSonata::new(cfg);
     println!("Starting up a Sonata instance.");
     if let Err(why) = bot.cli.start_autosharded() {

@@ -16,8 +16,8 @@ struct Handler;
 
 
 impl EventHandler for Handler {
-    fn ready(&self, _context: Context, ready: Ready) {
-        println!("{} ready!", ready.user.name);
+    fn ready(&self, context: Context, ready: Ready) {
+        println!("{} ready on shard #{}!", ready.user.name, context.shard_id);
     }
 }
 

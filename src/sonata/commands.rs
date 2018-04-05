@@ -11,6 +11,7 @@ impl Key for VoiceManager {
 }
 
 command!(summon(context, message, _arguments) {
+    println!("{} used the SUMMON command.", message.author.name);
     let voice_state =
         match message.guild() {
             Some(guild) => {
@@ -37,6 +38,7 @@ command!(summon(context, message, _arguments) {
 });
 
 command!(disconnect(context, message, _arguments) {
+    println!("{} used the DISCONNECT command.", message.author.name);
     let voice_state =
         match message.guild() {
             Some(guild) => {
@@ -63,6 +65,7 @@ command!(disconnect(context, message, _arguments) {
 });
 
 command!(play(context, message, arguments) {
+    println!("{} used the PLAY command.", message.author.name);
     let gid = message.guild_id().unwrap();
     let mut voice_manager = {
         let data = context.data.lock();
@@ -72,9 +75,9 @@ command!(play(context, message, arguments) {
     let music_url: String = match arguments.single::<String>() {
         Ok(url) => url,
         Err(_) => {
-            let _ = message.channel_id.say("Must provide a URL to a video or audio");
+            let _ = message.channel_id.say("Must provide a URL to a video or audio.");
             return Ok(());
-        },
+        }
     };
     let handler = manager.get_mut(gid).unwrap();
     let mdata = MusicCore::extract_data(music_url);
